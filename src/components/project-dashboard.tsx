@@ -90,6 +90,20 @@ function formatDateTime(value: string) {
   }).format(new Date(value));
 }
 
+function formatBeijingNow() {
+  return new Intl.DateTimeFormat("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).format(new Date());
+}
+
 function roleLabel(role: ProfileRole | null) {
   if (role === "admin") return "管理员";
   if (role === "member") return "组员";
@@ -122,6 +136,15 @@ export function ProjectDashboard({ supabaseReady }: { supabaseReady: boolean }) 
   const [authEmail, setAuthEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [beijingNow, setBeijingNow] = useState(() => formatBeijingNow());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setBeijingNow(formatBeijingNow());
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const supabase = createBrowserSupabaseClient();
@@ -582,14 +605,14 @@ export function ProjectDashboard({ supabaseReady }: { supabaseReady: boolean }) 
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="space-y-6">
             <div className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-4 py-1 text-sm font-semibold text-amber-700">
-              投稿管理 + 时间线 + 角色权限
+              项目管理
             </div>
             <div className="space-y-4">
               <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
-                现在已经有真正的角色系统了，不同账号会看到不同能力。
+                Zhong&apos;s Lab
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-slate-600">
-                `admin` 可管理项目和成员角色，`member` 可管理项目，`viewer` 只能查看。
+                {beijingNow}
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
