@@ -721,17 +721,6 @@ export function ProjectDashboard({ supabaseReady }: { supabaseReady: boolean }) 
         </div>
       ) : null}
 
-      {!session ? (
-        <section className="rounded-[1.75rem] border border-slate-200/80 bg-white/85 p-8 text-slate-600 shadow-[0_16px_50px_-30px_rgba(15,23,42,0.35)]">
-          <h2 className="text-2xl font-semibold text-slate-950">下一步要做的事</h2>
-          <ol className="mt-4 space-y-3 leading-7">
-            <li>1. 去 Supabase Auth 的 URL Configuration 配置 `http://localhost:3000`。</li>
-            <li>2. 重新执行项目里的 `supabase/init.sql`，让 profiles 和角色策略生效。</li>
-            <li>3. 回到这里输入邮箱，点登录链接后刷新页面。</li>
-          </ol>
-        </section>
-      ) : null}
-
       {permissions.canManageRoles ? (
         <section className="rounded-[1.75rem] border border-slate-200/80 bg-white/85 p-6 shadow-[0_16px_50px_-30px_rgba(15,23,42,0.35)]">
           <div className="mb-5">
