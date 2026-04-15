@@ -104,6 +104,36 @@ function formatBeijingNow() {
   }).format(new Date());
 }
 
+function getFriendlyAuthError(message: string) {
+  const normalized = message.toLowerCase();
+
+  if (normalized.includes("email rate limit exceeded")) {
+    return "邮件发送过于频繁，请稍等几分钟后再试。";
+  }
+
+  if (normalized.includes("email not confirmed")) {
+    return "当前邮箱尚未完成验证，请先检查邮箱中的验证邮件。";
+  }
+
+  if (
+    normalized.includes("redirect") ||
+    normalized.includes("site url") ||
+    normalized.includes("redirect url")
+  ) {
+    return "登录回跳地址配置有误，请检查 Supabase 里的 Site URL 和 Redirect URLs。";
+  }
+
+  if (normalized.includes("invalid email")) {
+    return "邮箱格式无效，请检查后重新输入。";
+  }
+
+  if (normalized.includes("email provider is disabled")) {
+    return "邮箱登录功能尚未开启，请到 Supabase Authentication 里启用 Email Provider。";
+  }
+
+  return `登录邮件发送失败：${message}`;
+}
+
 function roleLabel(role: ProfileRole | null) {
   if (role === "admin") return "管理员";
   if (role === "member") return "组员";
@@ -535,7 +565,7 @@ export function ProjectDashboard({ supabaseReady }: { supabaseReady: boolean }) 
     });
 
     if (signInError) {
-      setError(`登录邮件发送失败：${signInError.message}`);
+      setError(getFriendlyAuthError(signInError.message));
       setSendingLoginLink(false);
       return;
     }
