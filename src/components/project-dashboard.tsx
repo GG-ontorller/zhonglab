@@ -512,9 +512,7 @@ export function ProjectDashboard({ supabaseReady }: { supabaseReady: boolean }) 
     });
 
     if (signInError) {
-      setError(
-        "登录邮件发送失败。请先去 Supabase Auth 里把 Site URL 和 Redirect URL 配好。",
-      );
+      setError(`登录邮件发送失败：${signInError.message}`);
       setSendingLoginLink(false);
       return;
     }
