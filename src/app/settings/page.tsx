@@ -9,7 +9,7 @@ export default function SettingsPage() {
       suggestions={[
         "系统信息：部署域名、Supabase 项目、最近更新时间。",
         "权限说明：admin、member、viewer 的能力差异。",
-        "运维说明：如何新增管理员、如何重置数据、如何扩展新模块。",
+        "运维说明：如何新增管理员、如何重置数据、如何扩展新模块和聊天频道。",
       ]}
       actionHref="/library"
       actionLabel="看看成果资料库"

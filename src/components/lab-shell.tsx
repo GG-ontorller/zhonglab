@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const navigation = [
   { href: "/", label: "首页总览", desc: "Dashboard" },
   { href: "/projects", label: "项目管理", desc: "Projects" },
+  { href: "/chat", label: "公共聊天", desc: "Chat" },
   { href: "/members", label: "成员管理", desc: "People" },
   { href: "/schedule", label: "组会日程", desc: "Schedule" },
   { href: "/library", label: "成果资料库", desc: "Library" },
@@ -66,7 +67,7 @@ export function LabShell({ children }: { children: React.ReactNode }) {
           <div className="mt-6 rounded-[1.5rem] border border-slate-200/80 bg-slate-50 p-4">
             <div className="text-sm font-semibold text-slate-950">当前阶段</div>
             <p className="mt-2 text-sm leading-6 text-slate-500">
-              已上线项目管理模块，接下来适合补成员档案、组会纪要和成果沉淀。
+              已上线项目管理和公共聊天，接下来适合补成员档案、组会纪要和成果沉淀。
             </p>
           </div>
         </aside>

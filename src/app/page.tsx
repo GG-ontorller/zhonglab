@@ -24,6 +24,12 @@ export default function Home() {
                 打开项目管理
               </Link>
               <Link
+                href="/chat"
+                className="rounded-full border border-slate-200 bg-white px-5 py-3 font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+              >
+                进入公共聊天
+              </Link>
+              <Link
                 href="/members"
                 className="rounded-full border border-slate-200 bg-white px-5 py-3 font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
               >
@@ -40,8 +46,8 @@ export default function Home() {
             </div>
             <div className="rounded-[1.5rem] bg-sky-100 px-5 py-4 text-sky-900">
               <div className="text-sm text-sky-700">已可用</div>
-              <div className="mt-2 text-3xl font-semibold">1</div>
-              <div className="mt-2 text-sm text-sky-700">项目管理已支持登录、权限、时间线</div>
+              <div className="mt-2 text-3xl font-semibold">2</div>
+              <div className="mt-2 text-sm text-sky-700">项目管理与公共聊天都已经能用</div>
             </div>
             <div className="rounded-[1.5rem] bg-emerald-100 px-5 py-4 text-emerald-900">
               <div className="text-sm text-emerald-700">下一步</div>
@@ -68,6 +74,11 @@ export default function Home() {
             href: "/members",
             title: "成员管理",
             desc: "整理成员档案、研究方向、职责与联系方式。",
+          },
+          {
+            href: "/chat",
+            title: "公共聊天",
+            desc: "收纳实验室的即时沟通、通知和快速协作消息。",
           },
           {
             href: "/schedule",

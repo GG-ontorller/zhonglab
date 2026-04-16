@@ -69,6 +69,20 @@ alter table public.project_updates
 alter table public.project_updates
   add column if not exists created_by_email text;
 
+create table if not exists public.chat_messages (
+  id uuid primary key default gen_random_uuid(),
+  content text not null,
+  created_by uuid references auth.users(id) on delete set null,
+  created_by_email text,
+  created_at timestamptz not null default timezone('utc', now())
+);
+
+alter table public.chat_messages
+  add column if not exists created_by uuid references auth.users(id) on delete set null;
+
+alter table public.chat_messages
+  add column if not exists created_by_email text;
+
 create or replace function public.set_updated_at()
 returns trigger
 language plpgsql
@@ -89,6 +103,7 @@ execute function public.set_updated_at();
 alter table public.profiles enable row level security;
 alter table public.projects enable row level security;
 alter table public.project_updates enable row level security;
+alter table public.chat_messages enable row level security;
 
 drop policy if exists "Authenticated users can read profiles" on public.profiles;
 drop policy if exists "Admins can update profiles" on public.profiles;
@@ -225,3 +240,71 @@ using (
     where p.id = auth.uid() and p.role in ('admin', 'member')
   )
 );
+
+drop policy if exists "Authenticated users can read chat messages" on public.chat_messages;
+drop policy if exists "Authenticated users can insert chat messages" on public.chat_messages;
+drop policy if exists "Authenticated users can update chat messages" on public.chat_messages;
+drop policy if exists "Authenticated users can delete chat messages" on public.chat_messages;
+
+create policy "Authenticated users can read chat messages"
+on public.chat_messages
+for select
+to authenticated
+using (true);
+
+create policy "Authenticated users can insert chat messages"
+on public.chat_messages
+for insert
+to authenticated
+with check (
+  exists (
+    select 1
+    from public.profiles as p
+    where p.id = auth.uid() and p.role in ('admin', 'member')
+  )
+);
+
+create policy "Authenticated users can update chat messages"
+on public.chat_messages
+for update
+to authenticated
+using (
+  exists (
+    select 1
+    from public.profiles as p
+    where p.id = auth.uid() and p.role in ('admin', 'member')
+  )
+)
+with check (
+  exists (
+    select 1
+    from public.profiles as p
+    where p.id = auth.uid() and p.role in ('admin', 'member')
+  )
+);
+
+create policy "Authenticated users can delete chat messages"
+on public.chat_messages
+for delete
+to authenticated
+using (
+  exists (
+    select 1
+    from public.profiles as p
+    where p.id = auth.uid() and p.role in ('admin', 'member')
+  )
+);
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public'
+      and tablename = 'chat_messages'
+  ) then
+    alter publication supabase_realtime add table public.chat_messages;
+  end if;
+end
+$$;
